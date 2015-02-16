@@ -3,7 +3,6 @@
 #include "def.h"
 #include "types.h"
 #include "EEPROM.h"
-#include "Output.h"
 #include "MultiWii.h"
 #include "Serial.h"
 #include "Protocol.h"
@@ -542,7 +541,6 @@ void evaluateCommand() {
      }
      break;
    case MSP_MOTOR_PINS:
-     s_struct((uint8_t*)&PWM_PIN,8);
      break;
 
 #if defined(USE_MSP_WP) && !defined(I2C_GPS)    

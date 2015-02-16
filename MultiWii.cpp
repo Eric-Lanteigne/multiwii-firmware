@@ -18,7 +18,6 @@ November  2013     V2.3
 #include "Alarms.h"
 #include "EEPROM.h"
 #include "IMU.h"
-#include "Output.h"
 #include "RX.h"
 #include "Sensors.h"
 #include "Serial.h"
@@ -629,7 +628,6 @@ void setup() {
   BUZZERPIN_PINMODE;
   STABLEPIN_PINMODE;
   POWERPIN_OFF;
-  initOutput();
   readGlobalSet();
   #ifndef NO_FLASH_CHECK
     #if defined(MEGA)
@@ -1545,12 +1543,9 @@ void loop () {
 #else
   #error "*** you must set PID_CONTROLLER to one existing implementation"
 #endif
-  mixTable();
   // do not update servos during unarmed calibration of sensors which are sensitive to vibration
 #if defined(DISABLE_SERVOS_WHEN_UNARMED)
   if (f.ARMED) writeServos();
 #else
-  if ( (f.ARMED) || ((!calibratingG) && (!calibratingA)) ) writeServos();
 #endif 
-  writeMotors();
 }
