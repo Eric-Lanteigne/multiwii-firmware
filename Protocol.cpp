@@ -2,7 +2,6 @@
 #include "config.h"
 #include "def.h"
 #include "types.h"
-#include "EEPROM.h"
 #include "MultiWii.h"
 #include "Serial.h"
 #include "Protocol.h"
@@ -684,7 +683,6 @@ void evaluateCommand() {
 #endif
 
    case MSP_RESET_CONF:
-     if(!f.ARMED) LoadDefaults();
      headSerialReply(0);
      break;
    case MSP_ACC_CALIBRATION:
@@ -702,7 +700,6 @@ void evaluateCommand() {
      break;
    #endif
    case MSP_EEPROM_WRITE:
-     writeParams(0);
      headSerialReply(0);
      break;
    case MSP_DEBUG:

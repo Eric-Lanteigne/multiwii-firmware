@@ -16,7 +16,6 @@ November  2013     V2.3
 #include "types.h"
 #include "MultiWii.h"
 #include "Alarms.h"
-#include "EEPROM.h"
 #include "IMU.h"
 #include "RX.h"
 #include "Sensors.h"
@@ -628,7 +627,6 @@ void setup() {
   BUZZERPIN_PINMODE;
   STABLEPIN_PINMODE;
   POWERPIN_OFF;
-  readGlobalSet();
   #ifndef NO_FLASH_CHECK
     #if defined(MEGA)
       uint16_t i = 65000;                             // only first ~64K for mega board due to pgm_read_byte limitation
@@ -654,19 +652,19 @@ void setup() {
       if(flashsum != global_conf.flashsum) update_constants();  // update constants if firmware is changed and integrity is OK
     }
   #else
-    readEEPROM();                                               // check current setting integrity
+                                              // check current setting integrity
   #endif  
     if(global_conf.currentSet == 0) break;                      // all checks is done
     global_conf.currentSet--;                                   // next setting for check
   }
-  readGlobalSet();                              // reload global settings for get last profile number
+                            // reload global settings for get last profile number
   #ifndef NO_FLASH_CHECK
     if(flashsum != global_conf.flashsum) {
       global_conf.flashsum = flashsum;          // new flash sum
       writeGlobalSet(1);                        // update flash sum in global config
     }
   #endif
-  readEEPROM();                                 // load setting data from last used profile
+                                // load setting data from last used profile
   blinkLED(2,40,global_conf.currentSet+1);          
 
 #if GPS									
@@ -1001,7 +999,6 @@ void loop () {
         else if (rcSticks == THR_HI + YAW_CE + PIT_CE + ROL_HI) {conf.angleTrim[ROLL] +=2; i=1;}
         else if (rcSticks == THR_HI + YAW_CE + PIT_CE + ROL_LO) {conf.angleTrim[ROLL] -=2; i=1;}
         if (i) {
-          writeParams(1);
           rcDelayCommand = 0;    // allow autorepetition
           #if defined(LED_RING)
             blinkLedRing();
