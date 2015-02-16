@@ -11,7 +11,6 @@ November  2013     V2.3
 #include <avr/io.h>
 
 #include "Arduino.h"
-#include "config.h"
 #include "def.h"
 #include "types.h"
 #include "MultiWii.h"
@@ -32,13 +31,9 @@ int16_t rcData[RC_CHANS] = {1500, 1500,1500, 1500,1500, 1500,1500, 1500};    // 
 int16_t rcSerial[8];         // interval [1000;2000] - is rcData coming from MSP
 uint8_t rcSerialCount = 0;   // a counter to select legacy RX when there is no more MSP rc serial data
 
-void annexCode() { // this code is excetuted at each loop and won't interfere with control loop if it lasts less than 650 microseconds
-  serialCom();
-}
-
 void setup() {
-  SerialOpen(0,SERIAL0_COM_SPEED);
-  SerialOpen(1,SERIAL1_COM_SPEED);
+  SerialOpen(0,SERIAL_COM_SPEED);
+  SerialOpen(1,SERIAL_COM_SPEED);
   
   previousTime = micros();
 }
@@ -52,7 +47,7 @@ void loop () {
     computeRC();
   }
  
-  annexCode();
+  serialCom();
 
   // Measure loop rate
   currentTime = micros();

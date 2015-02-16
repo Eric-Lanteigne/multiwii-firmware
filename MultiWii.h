@@ -14,5 +14,4 @@ extern int16_t rcData[RC_CHANS];
 extern int16_t rcSerial[8];
 extern uint8_t rcSerialCount;
 
-void annexCode();
 #endif /* MULTIWII_H_ */

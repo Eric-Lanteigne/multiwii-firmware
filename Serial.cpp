@@ -1,5 +1,4 @@
 #include "Arduino.h"
-#include "config.h"
 #include "def.h"
 #include "Serial.h"
 #include "MultiWii.h"
