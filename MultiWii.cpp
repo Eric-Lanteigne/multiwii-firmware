@@ -57,11 +57,12 @@ void loop () {
     computeRC();
 
 	//Throttle
-	if(rcData[THROTTLE]==0){
+	//Experimentally, the left motor starts at 1181, right motor at 1138 (diff 43) 
+	if(rcData[THROTTLE]==0 ){
 		MotorL.detach();
 		MotorR.detach();
 	}else{
-		//Experimentally, the left motor starts at 1181, right motor at 1138 (diff 43) 
+
 		if(!MotorL.attached())MotorL.attach(MotorL_pin);
 		MotorL.writeMicroseconds(rcData[THROTTLE]+43+100);
 		if(!MotorR.attached())MotorR.attach(MotorR_pin);
@@ -93,11 +94,12 @@ void loop () {
 	}
 
 	//Rail (disabled also when centered, so it doesn't drift)
+	//Experimentally centered at 1377
 	if(rcData[AUX1]==0 || rcData[AUX1]==1500){
 		Rail.detach();
 	}else{
 		if(!Rail.attached())Rail.attach(Rail_pin);
-		Rail.writeMicroseconds(rcData[AUX1]);
+		Rail.writeMicroseconds(rcData[AUX1]-1500+1377);
 	}
   }
  
