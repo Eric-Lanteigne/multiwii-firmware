@@ -3,7 +3,6 @@
 #include "def.h"
 #include "types.h"
 #include "MultiWii.h"
-#include "Alarms.h"
 #include "IMU.h"
 #include "Sensors.h"
 
@@ -327,7 +326,6 @@ void GYRO_Common() {
       #if defined(BUZZER)
         alarmArray[7] = 4;
       #else
-        blinkLED(10,15,1); //the delay causes to beep the buzzer really long 
       #endif
       }
     }

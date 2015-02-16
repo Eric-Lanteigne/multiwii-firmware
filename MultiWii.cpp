@@ -15,7 +15,6 @@ November  2013     V2.3
 #include "def.h"
 #include "types.h"
 #include "MultiWii.h"
-#include "Alarms.h"
 #include "IMU.h"
 #include "RX.h"
 #include "Sensors.h"
@@ -663,9 +662,7 @@ void setup() {
       global_conf.flashsum = flashsum;          // new flash sum
       writeGlobalSet(1);                        // update flash sum in global config
     }
-  #endif
-                                // load setting data from last used profile
-  blinkLED(2,40,global_conf.currentSet+1);          
+  #endif  
 
 #if GPS									
   recallGPSconf();								//Load GPS configuration parameteres
@@ -797,7 +794,6 @@ void go_arm() {
       #endif
     }
   } else if(!f.ARMED) { 
-    blinkLED(2,255,1);
     alarmArray[8] = 1;
   }
 }
