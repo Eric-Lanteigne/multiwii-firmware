@@ -17,6 +17,7 @@ November  2013     V2.3
 #include "RX.h"
 #include "Serial.h"
 #include "Protocol.h"
+#include "Servo.h"
 
 #include <avr/pgmspace.h>
 
@@ -27,9 +28,18 @@ uint16_t cycleTime = 0;     // this is the number in micro second to achieve a f
 analog_t analog;
 int16_t  debug[4];
 
-int16_t rcData[RC_CHANS] = {1500, 1500,1500, 1500,1500, 1500,1500, 1500};    // interval [1000;2000]
+int16_t rcData[RC_CHANS] = {0, 0, 0, 0, 0, 0, 0, 0};    // interval [1000;2000]
 int16_t rcSerial[8];         // interval [1000;2000] - is rcData coming from MSP
 uint8_t rcSerialCount = 0;   // a counter to select legacy RX when there is no more MSP rc serial data
+
+//Servo definitions
+Servo MotorL,MotorR,Roll,Pitch,Yaw,Rail;
+#define MotorL_pin 10 //Controlled by throttle
+#define MotorR_pin 13 //Controlled by throttle
+#define Roll_pin 6 //Controlled by roll
+#define Pitch_pin 11 //Controlled by pitch
+#define Yaw_pin 5 //Controlled by yaw
+#define Rail_pin 9 //Controlled by AUX1
 
 void setup() {
   SerialOpen(0,SERIAL_COM_SPEED);
@@ -45,6 +55,50 @@ void loop () {
   if ((int16_t)(currentTime-rcTime) >0 ) { // 50Hz
     rcTime = currentTime + 20000;
     computeRC();
+
+	//Throttle
+	if(rcData[THROTTLE]==0){
+		MotorL.detach();
+		MotorR.detach();
+	}else{
+		//Experimentally, the left motor starts at 1181, right motor at 1138 (diff 43) 
+		if(!MotorL.attached())MotorL.attach(MotorL_pin);
+		MotorL.writeMicroseconds(rcData[THROTTLE]+43+100);
+		if(!MotorR.attached())MotorR.attach(MotorR_pin);
+		MotorR.writeMicroseconds(rcData[THROTTLE]+100);
+	}
+
+	//Roll
+	if(rcData[ROLL]==0){
+		Roll.detach();
+	}else{
+		if(!Roll.attached())Roll.attach(Roll_pin);
+		Roll.writeMicroseconds(rcData[ROLL]);
+	}
+
+	//Pitch
+	if(rcData[PITCH]==0){
+		Pitch.detach();
+	}else{
+		if(!Pitch.attached())Pitch.attach(Pitch_pin);
+		Pitch.writeMicroseconds(rcData[PITCH]);
+	}
+
+	//Yaw
+	if(rcData[YAW]==0){
+		Yaw.detach();
+	}else{
+		if(!Yaw.attached())Yaw.attach(Yaw_pin);
+		Yaw.writeMicroseconds(rcData[YAW]);
+	}
+
+	//Rail (disabled also when centered, so it doesn't drift)
+	if(rcData[AUX1]==0 || rcData[AUX1]==1500){
+		Rail.detach();
+	}else{
+		if(!Rail.attached())Rail.attach(Rail_pin);
+		Rail.writeMicroseconds(rcData[AUX1]);
+	}
   }
  
   serialCom();
