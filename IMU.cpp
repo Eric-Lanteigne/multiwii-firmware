@@ -4,7 +4,6 @@
 #include "types.h"
 #include "MultiWii.h"
 #include "IMU.h"
-#include "Sensors.h"
 
 void getEstimatedAttitude();
 
@@ -15,11 +14,11 @@ void computeIMU () {
 
   uint16_t timeInterleave = 0;
   #if ACC
-    ACC_getADC();
-    getEstimatedAttitude();
+    //ACC_getADC();
+    //getEstimatedAttitude();
   #endif
   #if GYRO
-    Gyro_getADC();
+    //Gyro_getADC();
   #endif
   for (axis = 0; axis < 3; axis++)
     gyroADCinter[axis] =  imu.gyroADC[axis];
@@ -29,7 +28,7 @@ void computeIMU () {
   while((int16_t)(micros()-timeInterleave)<650) t=1; //empirical, interleaving delay between 2 consecutive reads
   if (!t) annex650_overrun_count++;
   #if GYRO
-    Gyro_getADC();
+    //Gyro_getADC();
   #endif
   for (axis = 0; axis < 3; axis++) {
     gyroADCinter[axis] =  imu.gyroADC[axis]+gyroADCinter[axis];
@@ -186,7 +185,7 @@ void rotateV32( t_int32_t_vector *v,int16_t* delta) {
 }
 
 static int16_t accZ=0;
-
+/*
 void getEstimatedAttitude(){
   uint8_t axis;
   int32_t accMag = 0;
@@ -207,7 +206,7 @@ void getEstimatedAttitude(){
 
   // unit: radian per bit, scaled by 2^16 for further multiplication
   // with a delta time of 3000 us, and GYRO scale of most gyros, scale = a little bit less than 1
-  scale = (currentT - previousT) * (GYRO_SCALE * 65536);
+  //scale = (currentT - previousT) * (GYRO_SCALE * 65536);
   previousT = currentT;
 
   // Initialization
@@ -273,7 +272,7 @@ void getEstimatedAttitude(){
     accZoffset += accZ;
   }  
   accZ -= accZoffset>>3;
-}
+}*/
 
 #define UPDATE_INTERVAL 25000    // 40hz update rate (20hz LPF on acc)
 #define BARO_TAB_SIZE   21

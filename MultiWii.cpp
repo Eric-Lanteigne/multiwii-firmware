@@ -17,7 +17,6 @@ November  2013     V2.3
 #include "MultiWii.h"
 #include "IMU.h"
 #include "RX.h"
-#include "Sensors.h"
 #include "Serial.h"
 #include "Protocol.h"
 
@@ -675,7 +674,7 @@ void setup() {
   #if defined(OPENLRSv2MULTI)
     initOpenLRS();
   #endif
-  initSensors();
+//  initSensors();
   #if GPS
     GPS_set_pids();
   #endif
