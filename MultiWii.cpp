@@ -35,9 +35,9 @@ uint8_t rcSerialCount = 0;   // a counter to select legacy RX when there is no m
 //Servo definitions
 Servo MotorL,MotorR,Roll,Pitch,Yaw,Rail;
 #define MotorL_pin 10 //Controlled by throttle
-#define MotorR_pin 13 //Controlled by throttle
+#define MotorR_pin 11 //Controlled by AUX2
 #define Roll_pin 6 //Controlled by roll
-#define Pitch_pin 11 //Controlled by pitch
+#define Pitch_pin 13 //Controlled by pitch
 #define Yaw_pin 5 //Controlled by yaw
 #define Rail_pin 9 //Controlled by AUX1
 
@@ -56,17 +56,15 @@ void loop () {
     rcTime = currentTime + 20000;
     computeRC();
 
-	//Throttle
-	//Experimentally, the left motor starts at 1181, right motor at 1138 (diff 43) 
+	//Throttle 
 	if(rcData[THROTTLE]==0 ){
 		MotorL.detach();
 		MotorR.detach();
 	}else{
-
 		if(!MotorL.attached())MotorL.attach(MotorL_pin);
-		MotorL.writeMicroseconds(rcData[THROTTLE]+43+100);
+		MotorL.writeMicroseconds(rcData[THROTTLE]);
 		if(!MotorR.attached())MotorR.attach(MotorR_pin);
-		MotorR.writeMicroseconds(rcData[THROTTLE]+100);
+		MotorR.writeMicroseconds(rcData[AUX2]);
 	}
 
 	//Roll
